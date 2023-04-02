@@ -1,36 +1,74 @@
 ﻿using System.Data.SqlClient;
 
-
-var connStr = "Data Source=localhost;Initial Catalog=db_videogames;Integrated Security=True";
-
-using var conn = new SqlConnection(connStr);
-
-var players = new List<Player>();
+const string connectionString = "Data Source=localhost;Initial Catalog=db_videogames;Integrated Security=True";
+var manager = new VideogameManager(connectionString);
 
 
-try
+
+Console.WriteLine("Scegli una di queste opzioni:");
+Console.WriteLine("Inserire un nuovo videogioco (1)");
+Console.WriteLine("Ricercare un videogioco per id (2)");
+Console.WriteLine("Ricercare tutti i videogiochi aventi il nome contenente una determinata stringa inserita in input (3)");
+Console.WriteLine("Eliminare un videogioco (4)");
+Console.WriteLine("Chiudere il programma (5)");
+
+
+while (true)
 {
-    conn.Open();
+    int opzione = 0;
 
-    var query = "SELECT id, name, lastname FROM players WHERE name LIKE '%a' AND lastname LIKE '%y'";
-
-    using var command = new SqlCommand(query, conn);
-    using SqlDataReader reader = command.ExecuteReader();
-
-    while (reader.Read())
+    while (opzione is 0)
     {
-        var id = reader.GetInt64(0);
-        var name = reader.GetString(1);
-        var lastname = reader.GetString(2);
+        var input = Console.ReadLine();
 
-        var p = new Player(id, name, lastname);
-        players.Add(p);
+        opzione = identificaOpzione(input);
+    }
+
+    switch (opzione)
+    {
+        case 1:
+            break;
+        case 2:
+            {
+                Console.Write("Passa l'id: ");
+
+                var id = Convert.ToInt64(Console.ReadLine());
+                var videogame = manager.GetById(id);
+
+                if (videogame is null) Console.WriteLine("Videogame non trovato.");
+                else Console.WriteLine(videogame);
+            }
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
     }
 }
-catch (Exception ex)
+
+int identificaOpzione(string? input)
 {
-    Console.WriteLine(ex.Message);
+    switch (input)
+    {
+        case "1":
+        case "inserisci":
+            return 1;
+        case "2":
+        case "ricerca":
+            return 2;
+        case "3":
+        case "filtra":
+            return 3;
+        case "4":
+        case "elimina":
+            return 4;
+        case "5":
+        case "chiudi":
+            return 5;
+        default:
+            Console.WriteLine("Input non valido.");
+            return 0;
+    }
 }
-
-
-foreach (var player in players) Console.WriteLine(player);
