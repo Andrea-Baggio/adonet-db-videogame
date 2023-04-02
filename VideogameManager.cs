@@ -40,8 +40,31 @@ public class VideogameManager
             return null;
         }
     }
+    public bool InsertVideogame(Videogame videogame)
+    {
+        using var conn = new SqlConnection(connectionString);
 
+        try
+        {
+            conn.Open();
 
+            using var cmd = new SqlCommand(VideogameQueries.Insert, conn);
+
+            cmd.Parameters.AddWithValue("@Name", videogame.Name);
+            cmd.Parameters.AddWithValue("@Overview", videogame.Overview);
+            cmd.Parameters.AddWithValue("@ReleaseDate", videogame.ReleaseDate);
+            cmd.Parameters.AddWithValue("@SoftwareHouseId", videogame.SoftwareHouseId);
+
+            cmd.ExecuteNonQuery();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+    }
 
     public static class VideogameQueries
     {

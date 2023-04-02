@@ -10,7 +10,6 @@ Console.WriteLine("Inserire un nuovo videogioco (1)");
 Console.WriteLine("Ricercare un videogioco per id (2)");
 Console.WriteLine("Ricercare tutti i videogiochi aventi il nome contenente una determinata stringa inserita in input (3)");
 Console.WriteLine("Eliminare un videogioco (4)");
-Console.WriteLine("Chiudere il programma (5)");
 
 
 while (true)
@@ -27,6 +26,25 @@ while (true)
     switch (opzione)
     {
         case 1:
+            {
+                Console.Write("Passa il nome: ");
+                var name = Console.ReadLine() ?? ""; //questo vuol dire che se arriva una risposta vuota viene messo una stringa vuota
+
+                Console.Write("Passa l'overview: ");
+                var overview = Console.ReadLine() ?? "";
+
+                Console.Write("Passa la release date (yyyy-MM-dd): ");
+                var releaseDate = Convert.ToDateTime(Console.ReadLine());
+
+                Console.Write("Passa l'id della software house: ");
+                var softwareHouseId = Convert.ToInt64(Console.ReadLine());
+
+                var videogame = new Videogame(0, name, overview, releaseDate, softwareHouseId);
+                var success = manager.InsertVideogame(videogame);
+
+                if (success) Console.WriteLine("Videogioco inserito.");
+                else Console.WriteLine("Inserimento fallito.");
+            }
             break;
         case 2:
             {
@@ -42,8 +60,6 @@ while (true)
         case 3:
             break;
         case 4:
-            break;
-        case 5:
             break;
     }
 }
